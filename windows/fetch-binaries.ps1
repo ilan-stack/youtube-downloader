@@ -1,4 +1,4 @@
-# Fetch the Windows binaries (yt-dlp.exe, ffmpeg.exe, ffprobe.exe) into .\bin\
+# Fetch the Windows binaries (yt-dlp.exe, ffmpeg.exe, ffprobe.exe, deno.exe) into .\bin\
 # Run from PowerShell:  .\fetch-binaries.ps1
 $ErrorActionPreference = "Stop"
 
@@ -19,6 +19,14 @@ $extracted = Get-ChildItem -Path $tmp.FullName -Directory | Select-Object -First
 Copy-Item -Path (Join-Path $extracted.FullName "bin\ffmpeg.exe") -Destination (Join-Path $bin "ffmpeg.exe") -Force
 Copy-Item -Path (Join-Path $extracted.FullName "bin\ffprobe.exe") -Destination (Join-Path $bin "ffprobe.exe") -Force
 Remove-Item -Recurse -Force $tmp.FullName
+
+Write-Host ">> Downloading deno (JS runtime for YouTube anti-bot challenges) ..."
+$denoTmp = New-Item -ItemType Directory -Path ([System.IO.Path]::GetTempPath()) -Name ("deno_dl_" + [Guid]::NewGuid())
+$denoZip = Join-Path $denoTmp.FullName "deno.zip"
+Invoke-WebRequest -Uri "https://github.com/denoland/deno/releases/latest/download/deno-x86_64-pc-windows-msvc.zip" -OutFile $denoZip
+Expand-Archive -Path $denoZip -DestinationPath $denoTmp.FullName -Force
+Copy-Item -Path (Join-Path $denoTmp.FullName "deno.exe") -Destination (Join-Path $bin "deno.exe") -Force
+Remove-Item -Recurse -Force $denoTmp.FullName
 
 Write-Host ""
 Write-Host "Done. Binaries:"
