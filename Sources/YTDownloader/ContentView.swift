@@ -7,28 +7,14 @@ struct ContentView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("YouTube Downloader")
-                            .font(.system(size: 22, weight: .semibold))
-                        Spacer()
-                        Text("yt-dlp \(state.ytDlpVersion)")
-                            .font(.system(size: 11))
-                            .foregroundColor(.secondary)
+            VStack(spacing: 0) {
+                tabBar
+                Group {
+                    switch state.selectedTab {
+                    case .download: downloadTab
+                    case .caption: CaptionView(service: state.captionApp)
                     }
-                    .padding(.bottom, 4)
-
-                    inputCard
-
-                    if state.playerURL != nil {
-                        playerCard
-                    }
-
-                    filesCard
                 }
-                .padding(20)
-                .frame(maxWidth: 720)
             }
             if let toast = state.statusToast {
                 Text(toast)
@@ -45,6 +31,62 @@ struct ContentView: View {
         .background(Color(white: 0.06))
         .preferredColorScheme(.dark)
         .onDrop(of: [.url, .fileURL, .text], delegate: AppDropDelegate(state: state))
+    }
+
+    private var tabBar: some View {
+        HStack(spacing: 4) {
+            tabButton("Download", icon: "arrow.down.circle", tab: .download)
+            tabButton("Caption",  icon: "captions.bubble",   tab: .caption)
+            Spacer()
+            Text("yt-dlp \(state.ytDlpVersion)")
+                .font(.system(size: 11))
+                .foregroundColor(.secondary)
+                .padding(.trailing, 16)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color(white: 0.08))
+        .overlay(Rectangle().frame(height: 1).foregroundColor(Color(white: 0.18)), alignment: .bottom)
+    }
+
+    private func tabButton(_ title: String, icon: String, tab: AppState.AppTab) -> some View {
+        let selected = state.selectedTab == tab
+        return Button {
+            state.selectedTab = tab
+            if tab == .caption && !state.captionApp.isRunning {
+                state.captionApp.start()
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: icon).font(.system(size: 12))
+                Text(title).font(.system(size: 13, weight: selected ? .semibold : .regular))
+            }
+            .foregroundColor(selected ? .accentColor : .secondary)
+            .padding(.horizontal, 12).padding(.vertical, 6)
+            .background(selected ? Color.accentColor.opacity(0.15) : Color.clear)
+            .cornerRadius(6)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var downloadTab: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("YouTube Downloader")
+                    .font(.system(size: 22, weight: .semibold))
+                    .padding(.bottom, 4)
+
+                inputCard
+
+                if state.playerURL != nil {
+                    playerCard
+                }
+
+                filesCard
+            }
+            .padding(20)
+            .frame(maxWidth: 720)
+        }
     }
 
     // MARK: - Input card
@@ -244,7 +286,8 @@ struct ContentView: View {
                             file: f,
                             onPlay: { state.openPlayer(for: f) },
                             onReveal: { state.revealInFinder(f) },
-                            onConvert: { state.convertToCompatible(file: f.url) }
+                            onConvert: { state.convertToCompatible(file: f.url) },
+                            onCaption: { state.sendToCaptionApp(f) }
                         )
                         Divider().opacity(0.4)
                     }
@@ -304,6 +347,7 @@ struct FileRow: View {
     let onPlay: () -> Void
     let onReveal: () -> Void
     let onConvert: () -> Void
+    let onCaption: () -> Void
 
     var body: some View {
         HStack {
@@ -312,6 +356,9 @@ struct FileRow: View {
                     .lineLimit(1).multilineTextAlignment(.leading)
             }.buttonStyle(.plain).help("Click to play")
             Spacer()
+            Button { onCaption() } label: {
+                Image(systemName: "captions.bubble").font(.system(size: 12)).foregroundColor(.secondary)
+            }.buttonStyle(.plain).help("Send to caption-app").disabled(file.isAudio)
             Button { onConvert() } label: {
                 Image(systemName: "wand.and.stars").font(.system(size: 12)).foregroundColor(.secondary)
             }.buttonStyle(.plain).help("Make compatible mp4").disabled(file.isAudio)

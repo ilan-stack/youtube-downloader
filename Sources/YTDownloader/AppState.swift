@@ -60,6 +60,10 @@ final class AppState: ObservableObject {
     @Published var ytDlpVersion: String = "?"
     @Published var statusToast: String?   // transient status messages
 
+    @Published var selectedTab: AppTab = .download
+    let captionApp = CaptionAppService()
+    enum AppTab: String, Hashable { case download, caption }
+
     enum ProbeStatus: Equatable {
         case idle, loading, ready, error(String)
     }
@@ -70,6 +74,8 @@ final class AppState: ObservableObject {
     init() {
         refreshFiles()
         Task { await self.refreshVersion() }
+        // Start caption-app server in the background so the Caption tab is ready when clicked.
+        captionApp.start()
         // Auto-fill from clipboard when app becomes active.
         NotificationCenter.default.addObserver(
             forName: NSApplication.didBecomeActiveNotification,
@@ -357,6 +363,28 @@ final class AppState: ObservableObject {
     func closePlayer() { playerURL = nil; playerName = "" }
     func revealInFinder(_ file: DownloadedFile) {
         NSWorkspace.shared.activateFileViewerSelecting([file.url])
+    }
+
+    /// Switch to the Caption tab and (when caption-app is ready) upload the chosen video.
+    func sendToCaptionApp(_ file: DownloadedFile) {
+        selectedTab = .caption
+        if !captionApp.isRunning {
+            captionApp.start()
+        }
+        Task { [weak self] in
+            // Wait briefly for the server to come up, then upload.
+            for _ in 0..<60 {
+                if Task.isCancelled { return }
+                if self?.captionApp.isRunning == true { break }
+                try? await Task.sleep(nanoseconds: 500_000_000)
+            }
+            do {
+                try await self?.captionApp.uploadVideo(file.url)
+                await MainActor.run { self?.flashToast("Sent \(file.name) to caption-app") }
+            } catch {
+                await MainActor.run { self?.flashToast("Upload to caption-app failed: \(error.localizedDescription)") }
+            }
+        }
     }
 }
 
