@@ -1,6 +1,7 @@
 # PyInstaller spec for the YouTube Downloader Windows build.
 # Run: pyinstaller youtube-downloader.spec
-# Produces dist/YouTubeDownloader.exe (one-file)
+# Produces dist/YouTubeDownloader.exe (one-file, windowed)
+# Uses pywebview + WebView2 so it opens a native window instead of a browser tab.
 
 from pathlib import Path
 ROOT = Path.cwd()
@@ -10,7 +11,6 @@ a = Analysis(
     pathex=[str(ROOT)],
     binaries=[],
     datas=[
-        # Templates and bundled CLI binaries land at the executable root at runtime.
         ('templates', 'templates'),
         ('bin', 'bin'),
     ],
@@ -19,6 +19,10 @@ a = Analysis(
         'yt_dlp.extractor',
         'yt_dlp.utils',
         'waitress',
+        # pywebview's Windows backend pulls these dynamically
+        'webview',
+        'webview.platforms.edgechromium',
+        'clr_loader',
     ],
     hookspath=[],
     hooksconfig={},
@@ -40,7 +44,7 @@ exe = EXE(
     strip=False,
     upx=False,
     runtime_tmpdir=None,
-    console=True,        # keep a small console window so users see logs + can close it to quit
+    console=False,       # No console window — true desktop app
     disable_windowed_traceback=False,
     target_arch=None,
     codesign_identity=None,

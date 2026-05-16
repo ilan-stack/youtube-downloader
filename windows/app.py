@@ -289,30 +289,56 @@ PORT = 8768
 URL = f"http://127.0.0.1:{PORT}"
 
 
-def open_browser_when_ready():
-    """Wait for the server then open the user's default browser."""
+def wait_for_server(timeout: float = 6.0) -> bool:
+    """Poll the API until it responds (or timeout)."""
     import urllib.request
-    for _ in range(30):
+    deadline = time.time() + timeout
+    while time.time() < deadline:
         try:
             urllib.request.urlopen(URL + "/api/list", timeout=0.5).read()
-            break
+            return True
         except Exception:
-            time.sleep(0.2)
-    webbrowser.open(URL)
+            time.sleep(0.1)
+    return False
+
+
+def run_server():
+    """Background thread: run the Flask app via waitress (production WSGI)."""
+    try:
+        from waitress import serve
+        serve(app, host="127.0.0.1", port=PORT, threads=8, _quiet=True)
+    except ImportError:
+        app.run(host="127.0.0.1", port=PORT, debug=False)
 
 
 def main():
-    print(f"YouTube Downloader running at {URL}")
-    print(f"Downloads → {DOWNLOAD_DIR}")
-    print(f"Close this window to stop the server.")
-    threading.Thread(target=open_browser_when_ready, daemon=True).start()
-    # Use the production-ready waitress server when available (bundled by PyInstaller),
-    # fall back to Flask's dev server for development.
+    # Start the HTTP server in a background thread.
+    threading.Thread(target=run_server, daemon=True).start()
+    wait_for_server()
+
+    # Native desktop window via pywebview (WebView2 on Windows / WebKit on macOS).
+    # Falls back to the system default browser if pywebview isn't available.
     try:
-        from waitress import serve
-        serve(app, host="127.0.0.1", port=PORT, threads=8)
-    except ImportError:
-        app.run(host="127.0.0.1", port=PORT, debug=False)
+        import webview
+        window = webview.create_window(
+            title="YouTube Downloader",
+            url=URL,
+            width=820,
+            height=900,
+            resizable=True,
+            min_size=(560, 600),
+        )
+        webview.start()
+    except Exception:
+        print(f"YouTube Downloader running at {URL}")
+        print(f"Downloads → {DOWNLOAD_DIR}")
+        webbrowser.open(URL)
+        # Keep the process alive — when the server thread is daemon, main() would exit otherwise.
+        try:
+            while True:
+                time.sleep(60)
+        except KeyboardInterrupt:
+            pass
 
 
 if __name__ == "__main__":

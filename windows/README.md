@@ -1,6 +1,6 @@
 # YouTube Downloader — Windows build
 
-A standalone `YouTubeDownloader.exe` that bundles Python, Flask, `yt-dlp.exe`, and `ffmpeg.exe`. Same browser UI as the macOS version.
+A standalone `YouTubeDownloader.exe` that bundles Python, Flask, `yt-dlp.exe`, and `ffmpeg.exe`. Opens in its own native window (no Chrome / no browser tab) via [pywebview](https://pywebview.flowrl.com/) + Microsoft Edge WebView2 — looks and feels like a real desktop app.
 
 ## Run pre-built (recommended)
 
@@ -52,7 +52,7 @@ cd "Z:\Users\YOU\YTDownloader\windows"
 ## Known limitations
 
 - **Not code-signed** — Windows SmartScreen will warn on first launch. Click **More info → Run anyway**. To remove this warning permanently you'd need an Authenticode certificate ($100-300/year from a CA).
-- The .exe shows a console window — close it to quit the server. To hide it, change `console=True` to `console=False` in `youtube-downloader.spec` (you lose the log output, but the app still runs in the background).
+- **Requires Edge WebView2 runtime** — pre-installed on Windows 10 (since 2021) and Windows 11. On older builds, download the [Evergreen Standalone Installer](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) once.
 - Antivirus false positives are common with PyInstaller `--onefile` builds. If a user reports their AV blocks it, the fix is usually to whitelist the .exe or build with `--onedir` instead (gives a folder of files instead of one large .exe).
 
 ## File layout
