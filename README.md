@@ -21,9 +21,15 @@ A native macOS app for downloading YouTube videos. Built in Swift + SwiftUI, bun
 
 ## Install
 
+### macOS
+
 1. Download the latest `YouTube Downloader.dmg` from the [Releases](../../releases) page.
 2. Open the .dmg → drag **YouTube Downloader** to the **Applications** folder.
 3. First launch: right-click the app → **Open** → click **Open** in the Gatekeeper dialog. (The app is ad-hoc signed, not Apple-notarized — this only needs to be done once.)
+
+### Windows
+
+A companion Python/Flask build packaged as a single `.exe`. See [`windows/README.md`](windows/README.md) for build + install instructions. Same browser UI, just rendered in your default browser instead of a native window.
 
 ## Build from source
 
