@@ -640,6 +640,59 @@ def stream_file(filename: str):
     return send_from_directory(DOWNLOAD_DIR, filename, conditional=True)
 
 
+# Language code → human-readable label (subset shown to the player CC menu)
+LANG_LABELS: dict[str, str] = {
+    "en": "English", "iw": "Hebrew", "he": "Hebrew", "es": "Spanish",
+    "fr": "French", "de": "German", "it": "Italian", "pt": "Portuguese",
+    "ru": "Russian", "ar": "Arabic", "ja": "Japanese", "ko": "Korean",
+    "zh": "Chinese", "hi": "Hindi", "tr": "Turkish", "nl": "Dutch",
+    "pl": "Polish", "sv": "Swedish", "uk": "Ukrainian", "orig": "Original",
+}
+
+
+@app.route("/subs/<path:video_name>")
+def list_subs(video_name: str):
+    """Find sidecar .srt files for a given video and return their language tags."""
+    video_path = DOWNLOAD_DIR / video_name
+    if not video_path.exists():
+        return jsonify([])
+    base_stem = video_path.stem
+    subs = []
+    seen_langs = set()
+    for p in sorted(DOWNLOAD_DIR.iterdir(), key=lambda x: x.name):
+        if not p.is_file() or p.suffix.lower() != ".srt":
+            continue
+        if not p.name.startswith(base_stem):
+            continue
+        if p.stat().st_size == 0:
+            continue
+        # Filename pattern: <video_stem>.<lang>.srt or <video_stem>.<lang>-<from>-<id>.srt
+        remainder = p.stem[len(base_stem):].lstrip(".")
+        lang_tag = remainder.split(".")[0] if "." in remainder else remainder
+        lang = (lang_tag.split("-")[0] or "en").lower()
+        if lang in seen_langs:
+            continue
+        seen_langs.add(lang)
+        label = LANG_LABELS.get(lang, lang.upper())
+        subs.append({"name": p.name, "lang": lang, "label": label})
+    return jsonify(subs)
+
+
+@app.route("/sub/<path:filename>")
+def serve_sub_as_vtt(filename: str):
+    """Serve a .srt as WebVTT for HTML5 <track> consumption."""
+    p = DOWNLOAD_DIR / filename
+    if not p.exists() or p.suffix.lower() != ".srt":
+        return ("Not found", 404)
+    try:
+        text = p.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        text = p.read_text(encoding="latin-1", errors="replace")
+    # SRT → VTT: prepend header, swap comma → period in millisecond separator.
+    vtt = "WEBVTT\n\n" + re.sub(r"(\d{2}:\d{2}:\d{2}),(\d{3})", r"\1.\2", text)
+    return vtt, 200, {"Content-Type": "text/vtt; charset=utf-8"}
+
+
 # ---------------------------------------------------------------------------
 # Launch
 

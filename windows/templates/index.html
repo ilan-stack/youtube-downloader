@@ -379,10 +379,20 @@ async function refreshFiles() {
   filesEl.querySelectorAll('.convert').forEach(el => el.addEventListener('click', () => startConvert(el.dataset.name)));
 }
 
-function openPlayer(src, name) {
+async function openPlayer(src, name) {
   const isAudio = /\.(mp3|m4a|wav|ogg|aac|flac)$/i.test(name);
   const tag = isAudio ? 'audio' : 'video';
-  playerSlot.innerHTML = `<${tag} controls autoplay src="${src}"></${tag}>`;
+  let tracksHtml = '';
+  if (!isAudio) {
+    try {
+      const r = await fetch(api('/subs/' + encodeURIComponent(name)));
+      const subs = await r.json();
+      tracksHtml = subs.map((s, i) =>
+        `<track kind="subtitles" src="${api('/sub/' + encodeURIComponent(s.name))}" srclang="${s.lang}" label="${esc(s.label)}"${i === 0 ? ' default' : ''}>`
+      ).join('');
+    } catch (e) {}
+  }
+  playerSlot.innerHTML = `<${tag} controls autoplay crossorigin="anonymous" src="${src}">${tracksHtml}</${tag}>`;
   playerTitle.textContent = name;
   playerCard.classList.remove('hidden');
   playerCard.scrollIntoView({ behavior:'smooth', block:'start' });
