@@ -26,7 +26,7 @@ cp "$BIN_PATH" "$APP_DIR/Contents/MacOS/$EXEC_NAME"
 chmod +x "$APP_DIR/Contents/MacOS/$EXEC_NAME"
 
 # Bundled binaries
-for bin in yt-dlp ffmpeg ffprobe; do
+for bin in yt-dlp ffmpeg ffprobe deno; do
   if [ -f "$ROOT/Resources/$bin" ]; then
     cp "$ROOT/Resources/$bin" "$APP_DIR/Contents/Resources/$bin"
     chmod +x "$APP_DIR/Contents/Resources/$bin"

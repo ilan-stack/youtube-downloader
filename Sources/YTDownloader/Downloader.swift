@@ -78,6 +78,37 @@ enum Downloader {
         return nil
     }
 
+    /// deno lookup: bundled > Homebrew > system. yt-dlp uses deno to solve
+    /// YouTube's "n challenge" — without it, downloads with cookies often fail
+    /// with "Requested format is not available".
+    static func denoURL() -> URL? {
+        let bundled = Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/deno")
+        if FileManager.default.isExecutableFile(atPath: bundled.path) { return bundled }
+        for path in ["/opt/homebrew/bin/deno", "/usr/local/bin/deno", "/usr/bin/deno"] {
+            if FileManager.default.isExecutableFile(atPath: path) { return URL(fileURLWithPath: path) }
+        }
+        var dir = Bundle.main.executableURL?.deletingLastPathComponent()
+        for _ in 0..<6 {
+            guard let d = dir else { break }
+            let candidate = d.appendingPathComponent("Resources/deno")
+            if FileManager.default.isExecutableFile(atPath: candidate.path) { return candidate }
+            dir = d.deletingLastPathComponent()
+        }
+        return nil
+    }
+
+    /// Returns an environment dict with bundled binary dirs prepended to PATH so
+    /// yt-dlp can locate deno / ffmpeg via PATH lookup.
+    static func processEnvironment() -> [String: String] {
+        var env = ProcessInfo.processInfo.environment
+        var pathDirs: [String] = []
+        if let dir = denoURL()?.deletingLastPathComponent().path { pathDirs.append(dir) }
+        if let dir = ffmpegURL()?.deletingLastPathComponent().path { pathDirs.append(dir) }
+        let existing = env["PATH"] ?? "/usr/bin:/bin"
+        env["PATH"] = (pathDirs + [existing]).joined(separator: ":")
+        return env
+    }
+
     /// ffprobe lookup: bundled > Homebrew > system.
     static func ffprobeURL() -> URL? {
         let bundled = Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/ffprobe")
@@ -416,6 +447,7 @@ enum Downloader {
             let process = Process()
             process.executableURL = executable
             process.arguments = arguments
+            process.environment = processEnvironment()
             let outPipe = Pipe()
             let errPipe = Pipe()
             process.standardOutput = outPipe
@@ -457,6 +489,7 @@ enum Downloader {
             let process = Process()
             process.executableURL = executable
             process.arguments = arguments
+            process.environment = processEnvironment()
             let outPipe = Pipe()
             let errPipe = Pipe()
             process.standardOutput = outPipe
