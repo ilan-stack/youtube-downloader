@@ -12,17 +12,19 @@
     background: #0f1115;
     color: #e6e6e6;
     margin: 0;
-    padding: 40px 20px;
+    padding: 24px 20px;
     min-height: 100vh;
   }
   .wrap { max-width: 720px; margin: 0 auto; }
-  h1 { font-weight: 600; letter-spacing: -0.02em; margin: 0 0 24px; }
+  .header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+  h1 { font-weight: 600; letter-spacing: -0.02em; margin: 0; font-size: 22px; }
+  .ver { font-size: 11px; color: #8a8f99; }
   .card {
     background: #181b22;
     border: 1px solid #262a33;
     border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 18px;
+    padding: 16px;
+    margin-bottom: 16px;
   }
   .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
   input[type=text] {
@@ -31,53 +33,71 @@
     background: #0f1115;
     border: 1px solid #2a2f3a;
     color: #e6e6e6;
-    padding: 12px 14px;
+    padding: 10px 14px;
     border-radius: 10px;
-    font-size: 15px;
+    font-size: 14px;
     outline: none;
+    font-family: inherit;
   }
   input[type=text]:focus { border-color: #4c8bf5; }
   select, button {
     background: #0f1115;
     border: 1px solid #2a2f3a;
     color: #e6e6e6;
-    padding: 12px 14px;
+    padding: 10px 14px;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
     font-family: inherit;
   }
   button.primary { background: #4c8bf5; border-color: #4c8bf5; color: white; font-weight: 600; }
   button.primary:hover { filter: brightness(1.1); }
-  button:disabled, select:disabled { opacity: 0.5; cursor: not-allowed; }
+  button:disabled, select:disabled, input:disabled { opacity: 0.5; cursor: not-allowed; }
   .info {
     display: flex;
-    gap: 14px;
-    margin-top: 14px;
-    padding: 12px;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 10px;
     background: #0f1115;
     border: 1px solid #20242c;
-    border-radius: 10px;
+    border-radius: 8px;
     align-items: center;
   }
   .info img { width: 100px; height: 56px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
   .info .meta-text { flex: 1; min-width: 0; }
-  .info .vtitle { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .info .vtitle { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .info .sub { font-size: 12px; color: #8a8f99; margin-top: 4px; }
   .info.loading .vtitle { color: #8a8f99; }
   .info.error { border-color: #5a2a2a; }
   .info.error .vtitle { color: #f87171; }
-  .job { padding: 12px 14px; border: 1px solid #262a33; border-radius: 10px; margin-top: 10px; }
-  .job .title { font-size: 14px; color: #c8c8c8; word-break: break-all; }
-  .job .meta { font-size: 12px; color: #8a8f99; margin-top: 4px; font-variant-numeric: tabular-nums; }
-  .bar { height: 6px; background: #262a33; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+
+  details.advanced { margin-top: 10px; }
+  details.advanced > summary { cursor: pointer; color: #8a8f99; font-size: 12px; user-select: none; padding: 6px 0; list-style: none; }
+  details.advanced > summary::before { content: "▸ "; }
+  details.advanced[open] > summary::before { content: "▾ "; }
+  .adv-body { padding-top: 8px; display: flex; flex-direction: column; gap: 10px; }
+  .adv-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .adv-row label.title { font-size: 12px; color: #8a8f99; min-width: 78px; }
+  .adv-row input[type=text] { padding: 7px 10px; min-width: 0; max-width: 140px; flex: 0 1 auto; }
+  .checks { display: flex; gap: 18px; align-items: center; }
+  .checks label { font-size: 12px; display: flex; gap: 6px; align-items: center; cursor: pointer; }
+  .checks input { accent-color: #4c8bf5; }
+
+  .job { padding: 10px 12px; border: 1px solid #262a33; border-radius: 8px; margin-top: 8px; display: flex; gap: 10px; align-items: flex-start; }
+  .job .meta-col { flex: 1; min-width: 0; }
+  .job .title { font-size: 13px; color: #c8c8c8; word-break: break-all; }
+  .job .meta { font-size: 11px; color: #8a8f99; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .bar { height: 5px; background: #262a33; border-radius: 3px; margin-top: 6px; overflow: hidden; }
   .bar > div { height: 100%; background: #4c8bf5; width: 0%; transition: width 0.3s; }
+  .cancel-x { background: none; border: none; color: #8a8f99; cursor: pointer; padding: 2px 6px; font-size: 16px; }
+  .cancel-x:hover { color: #f87171; }
   .status-done { color: #4ade80; }
   .status-error { color: #f87171; }
   a { color: #4c8bf5; text-decoration: none; }
   a:hover { text-decoration: underline; }
-  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: #8a8f99; margin: 0; font-weight: 600; }
-  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #8a8f99; margin: 0; font-weight: 600; }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .link-btn {
     background: none;
     border: none;
@@ -88,34 +108,36 @@
     border-radius: 6px;
     font-family: inherit;
   }
-  .link-btn:hover { color: #f87171; background: #20242c; }
+  .link-btn:hover { color: #4c8bf5; background: #20242c; }
   .link-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .file { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #20242c; font-size: 13px; }
+  .link-btn.danger:hover { color: #f87171; }
+
+  .file { display: flex; align-items: center; padding: 7px 0; border-bottom: 1px solid #20242c; font-size: 13px; gap: 8px; }
   .file:last-child { border-bottom: none; }
-  .file .name { word-break: break-all; padding-right: 12px; }
-  .file .size { color: #8a8f99; white-space: nowrap; }
-  .empty { color: #8a8f99; font-size: 13px; text-align: center; padding: 12px 0; }
+  .file .name { flex: 1; cursor: pointer; color: #4c8bf5; word-break: break-all; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file .name:hover { text-decoration: underline; }
+  .file .actions { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+  .icon-btn { background: none; border: none; color: #8a8f99; cursor: pointer; padding: 4px 6px; border-radius: 4px; font-size: 14px; line-height: 1; }
+  .icon-btn:hover { color: #4c8bf5; background: #20242c; }
+  .file .size { color: #8a8f99; white-space: nowrap; font-size: 12px; min-width: 60px; text-align: right; }
+  .empty { color: #8a8f99; font-size: 13px; text-align: center; padding: 10px 0; }
   .hidden { display: none; }
-  .file .name { cursor: pointer; }
-  .file .name:hover { color: #4c8bf5; }
-  .file-actions { display: flex; gap: 10px; align-items: center; white-space: nowrap; }
-  .dl-link { color: #8a8f99; font-size: 16px; line-height: 1; padding: 2px 6px; border-radius: 6px; }
-  .dl-link:hover { color: #4c8bf5; background: #20242c; text-decoration: none; }
-  .player-card video, .player-card audio { width: 100%; border-radius: 8px; background: #000; display: block; }
-  .player-card .ptitle { font-size: 13px; color: #c8c8c8; margin-bottom: 10px; word-break: break-all; padding-right: 30px; }
+
   .player-card { position: relative; }
+  .player-card video, .player-card audio { width: 100%; border-radius: 8px; background: #000; display: block; }
+  .player-card .ptitle { font-size: 13px; color: #c8c8c8; margin-bottom: 8px; word-break: break-all; padding-right: 30px; }
   .close-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 8px;
+    right: 8px;
     background: #0f1115;
     border: 1px solid #2a2f3a;
     color: #e6e6e6;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1;
     padding: 0;
     display: flex;
@@ -123,16 +145,33 @@
     justify-content: center;
   }
   .close-btn:hover { color: #f87171; }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+    background: #4c8bf5;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    max-width: 500px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    z-index: 100;
+  }
+  .toast.error { background: #b94545; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>YouTube Downloader</h1>
+  <div class="header">
+    <h1>YouTube Downloader</h1>
+    <span class="ver" id="ver">yt-dlp …</span>
+  </div>
 
   <div class="card">
-    <div class="row">
-      <input id="url" type="text" placeholder="https://youtube.com/watch?v=..." autofocus />
-    </div>
+    <input id="url" type="text" placeholder="https://youtube.com/watch?v=..." autofocus />
 
     <div id="info" class="info hidden">
       <img id="thumb" alt="" />
@@ -142,13 +181,49 @@
       </div>
     </div>
 
-    <div class="row" style="margin-top: 14px;">
+    <div class="row" style="margin-top: 12px;">
       <select id="quality">
         <option value="best">Best available</option>
       </select>
       <button class="primary" id="go" disabled>Download</button>
-      <button id="reset" type="button">Reset</button>
+      <button id="reset">Reset</button>
     </div>
+
+    <details class="advanced" id="advanced">
+      <summary>Advanced</summary>
+      <div class="adv-body">
+        <div class="adv-row">
+          <label class="title">Trim:</label>
+          <input type="text" id="trimStart" placeholder="Start (e.g. 0:30)" />
+          <span style="color:#8a8f99; font-size: 12px;">to</span>
+          <input type="text" id="trimEnd" placeholder="End (e.g. 2:00)" />
+        </div>
+        <div class="adv-row">
+          <label class="title">Subtitles:</label>
+          <div class="checks">
+            <label><input type="checkbox" id="subHuman" checked /> Human captions</label>
+            <label><input type="checkbox" id="subAuto" /> Auto / translated</label>
+          </div>
+        </div>
+        <div class="adv-row">
+          <label class="title">Also include:</label>
+          <select id="subLang">
+            {% for code, label in subtitle_languages %}
+              <option value="{{ code }}">{{ "English only" if code == "en" else label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="adv-row">
+          <label class="title">Cookies from:</label>
+          <select id="cookies">
+            {% for code, label in browser_choices %}
+              <option value="{{ code }}">{{ label }}</option>
+            {% endfor %}
+          </select>
+          <span style="color:#8a8f99; font-size: 11px;">(bypass rate limits when signed in)</span>
+        </div>
+      </div>
+    </details>
 
     <div id="jobs"></div>
   </div>
@@ -162,59 +237,59 @@
   <div class="card">
     <div class="card-header">
       <h2>Recent files</h2>
-      <button class="link-btn" id="clearFiles" disabled>Clear all</button>
+      <div>
+        <button class="link-btn" id="updateYtDlp" title="Download the latest yt-dlp binary">Update yt-dlp</button>
+        <button class="link-btn danger" id="clearFiles" disabled>Clear all</button>
+      </div>
     </div>
     <div id="files"><div class="empty">No downloads yet.</div></div>
   </div>
 </div>
 
+<div id="toast" class="toast hidden"></div>
+
 <script>
-const API_BASE = (location.protocol === 'http:' || location.protocol === 'https:')
-  ? ''
-  : 'http://127.0.0.1:8768';
-const api = (path) => API_BASE + path;
+const API = (location.protocol === 'http:' || location.protocol === 'https:') ? '' : 'http://127.0.0.1:8768';
+const api = p => API + p;
 
-const urlInput = document.getElementById('url');
-const qualitySel = document.getElementById('quality');
-const goBtn = document.getElementById('go');
-const jobsEl = document.getElementById('jobs');
-const filesEl = document.getElementById('files');
-const infoEl = document.getElementById('info');
-const thumbEl = document.getElementById('thumb');
-const vtitleEl = document.getElementById('vtitle');
-const vsubEl = document.getElementById('vsub');
+const $ = id => document.getElementById(id);
+const urlInput = $('url');
+const qualitySel = $('quality');
+const goBtn = $('go');
+const resetBtn = $('reset');
+const jobsEl = $('jobs');
+const filesEl = $('files');
+const infoEl = $('info');
+const thumbEl = $('thumb');
+const vtitleEl = $('vtitle');
+const vsubEl = $('vsub');
+const verEl = $('ver');
+const playerCard = $('playerCard');
+const playerSlot = $('playerSlot');
+const playerTitle = $('playerTitle');
+const toastEl = $('toast');
+const clearBtn = $('clearFiles');
 const tracked = new Map();
-
 let probeToken = 0;
-let currentPresets = null;
+let probeTimer = null;
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmtDuration(s){if(!s)return'';s=Math.round(s);const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(x).padStart(2,'0')}`:`${m}:${String(x).padStart(2,'0')}`}
+
+function toast(msg, isError=false) {
+  toastEl.textContent = msg;
+  toastEl.classList.toggle('error', isError);
+  toastEl.classList.remove('hidden');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>toastEl.classList.add('hidden'), 4500);
 }
 
-function fmtDuration(secs) {
-  if (!secs) return '';
-  secs = Math.round(secs);
-  const h = Math.floor(secs / 3600);
-  const m = Math.floor((secs % 3600) / 60);
-  const s = secs % 60;
-  return h ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
-}
-
-function setQualityOptions(presets) {
-  currentPresets = presets;
+function setQuality(presets) {
   qualitySel.innerHTML = '';
-  if (!presets || !presets.length) {
-    qualitySel.innerHTML = '<option value="best">Best available</option>';
-    goBtn.disabled = false;
-    return;
-  }
-  // Best (auto) on top
-  const opt = document.createElement('option');
-  opt.value = 'best';
-  opt.textContent = 'Best available';
-  qualitySel.appendChild(opt);
-  for (const p of presets) {
+  const best = document.createElement('option');
+  best.value = 'best'; best.textContent = 'Best available';
+  qualitySel.appendChild(best);
+  for (const p of presets || []) {
     const o = document.createElement('option');
     o.value = p.audio_only ? 'audio' : String(p.height);
     const size = p.size_mb ? ` — ${p.size_mb} MB` : '';
@@ -225,79 +300,62 @@ function setQualityOptions(presets) {
 }
 
 async function probe(url) {
-  const myToken = ++probeToken;
-  infoEl.classList.remove('hidden', 'error');
+  const tok = ++probeToken;
+  infoEl.classList.remove('hidden','error');
   infoEl.classList.add('loading');
   thumbEl.style.visibility = 'hidden';
-  vtitleEl.textContent = 'Fetching info...';
+  vtitleEl.textContent = 'Fetching info…';
   vsubEl.textContent = '';
   goBtn.disabled = true;
-
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 20000);
+  const timer = setTimeout(()=>ctrl.abort(), 25000);
   try {
     const r = await fetch(api('/api/info'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url }),
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ url, cookies_from_browser: $('cookies').value }),
       signal: ctrl.signal,
     });
     clearTimeout(timer);
-    if (myToken !== probeToken) return;
-    const data = await r.json();
-    if (!r.ok) throw new Error(data.error || 'failed');
+    if (tok !== probeToken) return;
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'failed');
     infoEl.classList.remove('loading');
-    if (data.thumbnail) {
-      thumbEl.src = data.thumbnail;
-      thumbEl.style.visibility = 'visible';
-    }
-    vtitleEl.textContent = data.title || '';
+    if (d.thumbnail) { thumbEl.src = d.thumbnail; thumbEl.style.visibility = 'visible'; }
+    vtitleEl.textContent = d.title || '';
     const parts = [];
-    if (data.uploader) parts.push(data.uploader);
-    if (data.duration) parts.push(fmtDuration(data.duration));
+    if (d.uploader) parts.push(d.uploader);
+    if (d.duration) parts.push(fmtDuration(d.duration));
     vsubEl.textContent = parts.join(' · ');
-    setQualityOptions(data.presets);
+    setQuality(d.presets);
   } catch (e) {
     clearTimeout(timer);
-    if (myToken !== probeToken) return;
-    infoEl.classList.remove('loading');
-    infoEl.classList.add('error');
+    if (tok !== probeToken) return;
+    infoEl.classList.remove('loading'); infoEl.classList.add('error');
     thumbEl.style.visibility = 'hidden';
-    const aborted = e.name === 'AbortError';
-    vtitleEl.textContent = aborted
-      ? 'Request blocked or timed out — try an incognito window (a browser extension may be interfering).'
-      : 'Could not fetch info: ' + e.message;
+    vtitleEl.textContent = e.name === 'AbortError' ? 'Request timed out.' : 'Could not fetch info: ' + e.message;
     vsubEl.textContent = '';
-    // Still allow downloading with presets
-    setQualityOptions([
-      { label: '1080p', height: 1080, audio_only: false },
-      { label: '720p', height: 720, audio_only: false },
-      { label: '480p', height: 480, audio_only: false },
-      { label: '360p', height: 360, audio_only: false },
-      { label: 'Audio (mp3)', height: 0, audio_only: true },
+    setQuality([
+      { label:'1080p', height:1080, audio_only:false },
+      { label:'720p', height:720, audio_only:false },
+      { label:'480p', height:480, audio_only:false },
+      { label:'360p', height:360, audio_only:false },
+      { label:'Audio (mp3)', height:0, audio_only:true },
     ]);
   }
 }
 
-let probeTimer = null;
 function scheduleProbe() {
   clearTimeout(probeTimer);
   const url = urlInput.value.trim();
-  if (!url) {
-    infoEl.classList.add('hidden');
-    goBtn.disabled = true;
-    return;
-  }
-  if (!/^https?:\/\//.test(url)) {
-    return;
-  }
-  probeTimer = setTimeout(() => probe(url), 400);
+  if (!url) { infoEl.classList.add('hidden'); goBtn.disabled = true; return; }
+  if (!/^https?:\/\//.test(url)) return;
+  probeTimer = setTimeout(()=>probe(url), 400);
 }
 
 async function refreshFiles() {
   const r = await fetch(api('/api/list'));
   const list = await r.json();
-  const clearBtn = document.getElementById('clearFiles');
   if (!list.length) {
     filesEl.innerHTML = '<div class="empty">No downloads yet.</div>';
     clearBtn.disabled = true;
@@ -306,61 +364,71 @@ async function refreshFiles() {
   filesEl.innerHTML = list.map(f => {
     const stream = api('/stream/' + encodeURIComponent(f.name));
     const dl = api('/file/' + encodeURIComponent(f.name));
-    return `<div class="file"><span class="name" data-src="${stream}" data-name="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span><span class="file-actions"><a class="dl-link" href="${dl}" title="Download" download>↓</a><span class="size">${f.size_mb} MB</span></span></div>`;
+    const isAudio = /\.(mp3|m4a|wav|ogg|aac|flac)$/i.test(f.name);
+    return `<div class="file">
+      <span class="name" data-src="${stream}" data-name="${esc(f.name)}" title="Click to play">${esc(f.name)}</span>
+      <span class="actions">
+        ${isAudio ? '' : `<button class="icon-btn convert" data-name="${esc(f.name)}" title="Make compatible mp4">✨</button>`}
+        <a class="icon-btn" href="${dl}" title="Download" download>↓</a>
+      </span>
+      <span class="size">${f.size_mb} MB</span>
+    </div>`;
   }).join('');
   clearBtn.disabled = false;
-  filesEl.querySelectorAll('.name').forEach(el => {
-    el.addEventListener('click', () => openPlayer(el.dataset.src, el.dataset.name));
-  });
+  filesEl.querySelectorAll('.name').forEach(el => el.addEventListener('click', () => openPlayer(el.dataset.src, el.dataset.name)));
+  filesEl.querySelectorAll('.convert').forEach(el => el.addEventListener('click', () => startConvert(el.dataset.name)));
 }
 
 function openPlayer(src, name) {
-  const slot = document.getElementById('playerSlot');
-  const card = document.getElementById('playerCard');
-  const title = document.getElementById('playerTitle');
   const isAudio = /\.(mp3|m4a|wav|ogg|aac|flac)$/i.test(name);
   const tag = isAudio ? 'audio' : 'video';
-  slot.innerHTML = `<${tag} controls autoplay src="${src}"></${tag}>`;
-  title.textContent = name;
-  card.classList.remove('hidden');
-  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  playerSlot.innerHTML = `<${tag} controls autoplay src="${src}"></${tag}>`;
+  playerTitle.textContent = name;
+  playerCard.classList.remove('hidden');
+  playerCard.scrollIntoView({ behavior:'smooth', block:'start' });
 }
-
-function closePlayer() {
-  const slot = document.getElementById('playerSlot');
-  const card = document.getElementById('playerCard');
-  slot.innerHTML = '';
-  card.classList.add('hidden');
-}
-
-document.getElementById('closePlayer').addEventListener('click', closePlayer);
+$('closePlayer').addEventListener('click', () => { playerSlot.innerHTML = ''; playerCard.classList.add('hidden'); });
 
 async function clearAllFiles() {
   const r = await fetch(api('/api/list'));
   const list = await r.json();
   if (!list.length) return;
-  if (!confirm(`Delete ${list.length} file${list.length === 1 ? '' : 's'} from the downloads folder? This cannot be undone.`)) return;
-  await fetch(api('/api/files'), { method: 'DELETE' });
+  if (!confirm(`Delete ${list.length} file${list.length===1?'':'s'} from the downloads folder? This cannot be undone.`)) return;
+  await fetch(api('/api/files'), { method:'DELETE' });
   refreshFiles();
 }
-
-document.getElementById('clearFiles').addEventListener('click', clearAllFiles);
+clearBtn.addEventListener('click', clearAllFiles);
 
 function renderJob(jobId, job) {
   const el = tracked.get(jobId);
-  const pctNum = parseFloat((job.percent || '0').replace('%','')) || 0;
-  const title = job.title || job.url || '...';
+  if (!el) return;
+  const pctNum = parseFloat((job.percent||'0').replace('%','')) || 0;
+  const title = job.title || job.url || job.filename || '…';
   let meta = '';
-  if (job.status === 'downloading') meta = `${job.percent || ''} · ${job.speed || ''} · ETA ${job.eta || ''}`;
-  else if (job.status === 'processing') meta = 'Processing / merging...';
-  else if (job.status === 'queued') meta = 'Queued...';
-  else if (job.status === 'done') meta = `<span class="status-done">Done →</span> <a href="${api('/file/' + encodeURIComponent(job.filename))}">${escapeHtml(job.filename)}</a>`;
-  else if (job.status === 'error') meta = `<span class="status-error">Error:</span> ${escapeHtml(job.error || '')}`;
+  if (job.status === 'downloading') {
+    const parts = [job.percent || ''];
+    if (job.speed) parts.push(job.speed);
+    if (job.eta) parts.push('ETA ' + job.eta);
+    meta = parts.filter(Boolean).join(' · ');
+  } else if (job.status === 'processing') meta = 'Processing…';
+  else if (job.status === 'queued') meta = 'Queued…';
+  else if (job.status === 'cancelled') meta = `<span class="status-error">Cancelled</span>`;
+  else if (job.status === 'done') {
+    if (job.filename) meta = `<span class="status-done">Done →</span> ${esc(job.filename)}`;
+    else meta = `<span class="status-done">Done</span>`;
+  }
+  else if (job.status === 'error') meta = `<span class="status-error">Error:</span> ${esc(job.error||'')}`;
+  const cancellable = (job.status === 'queued' || job.status === 'downloading' || job.status === 'processing');
+  const cancelBtn = cancellable ? `<button class="cancel-x" data-jobid="${jobId}">×</button>` : '';
   el.innerHTML = `
-    <div class="title">${escapeHtml(title)}</div>
-    <div class="meta">${meta}</div>
-    <div class="bar"><div style="width:${pctNum}%"></div></div>
+    <div class="meta-col">
+      <div class="title">${esc(title)}</div>
+      <div class="meta">${meta}</div>
+      <div class="bar"><div style="width:${pctNum > 0 ? pctNum : (job.status==='done'?100:0)}%"></div></div>
+    </div>
+    ${cancelBtn}
   `;
+  el.querySelector('.cancel-x')?.addEventListener('click', () => cancelJob(jobId));
 }
 
 async function pollJob(jobId) {
@@ -369,12 +437,26 @@ async function pollJob(jobId) {
     if (!r.ok) return;
     const job = await r.json();
     renderJob(jobId, job);
-    if (job.status === 'done' || job.status === 'error') {
+    if (job.status === 'done' || job.status === 'error' || job.status === 'cancelled') {
+      if (job.warning) toast(job.warning, true);
       refreshFiles();
       return;
     }
-    await new Promise(res => setTimeout(res, 700));
+    await new Promise(r => setTimeout(r, 700));
   }
+}
+
+function addJob(jobId, initialTitle) {
+  const div = document.createElement('div');
+  div.className = 'job';
+  jobsEl.prepend(div);
+  tracked.set(jobId, div);
+  renderJob(jobId, { status:'queued', title: initialTitle });
+  pollJob(jobId);
+}
+
+async function cancelJob(jobId) {
+  try { await fetch(api('/api/cancel/' + jobId), { method:'POST' }); } catch(e){}
 }
 
 async function startDownload() {
@@ -382,62 +464,94 @@ async function startDownload() {
   if (!url) return;
   const val = qualitySel.value;
   const body = { url };
-  if (val === 'audio') {
-    body.audio_only = true;
-  } else if (val !== 'best') {
-    body.height = parseInt(val, 10);
-  }
+  if (val === 'audio') body.audio_only = true;
+  else if (val !== 'best') body.height = parseInt(val, 10);
+  if ($('subHuman').checked) body.include_human_subtitles = true;
+  if ($('subAuto').checked) body.include_auto_subtitles = true;
+  body.subtitle_language = $('subLang').value || 'en';
+  if ($('trimStart').value.trim()) body.start_time = $('trimStart').value.trim();
+  if ($('trimEnd').value.trim()) body.end_time = $('trimEnd').value.trim();
+  if ($('cookies').value) body.cookies_from_browser = $('cookies').value;
   goBtn.disabled = true;
   try {
     const r = await fetch(api('/api/download'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify(body),
     });
-    const data = await r.json();
-    if (data.job_id) {
-      const div = document.createElement('div');
-      div.className = 'job';
-      jobsEl.prepend(div);
-      tracked.set(data.job_id, div);
-      renderJob(data.job_id, { status: 'queued', url });
-      pollJob(data.job_id);
-      urlInput.value = '';
-      infoEl.classList.add('hidden');
+    const d = await r.json();
+    if (d.job_id) {
+      addJob(d.job_id, vtitleEl.textContent || url);
+      urlInput.value = ''; infoEl.classList.add('hidden');
       qualitySel.innerHTML = '<option value="best">Best available</option>';
-    } else {
-      alert('Error: ' + (data.error || 'unknown'));
-    }
+    } else toast(d.error || 'Unknown error', true);
   } finally {
-    goBtn.disabled = qualitySel.options.length <= 1 || !urlInput.value.trim();
+    goBtn.disabled = !urlInput.value.trim();
     urlInput.focus();
   }
 }
 
+async function startConvert(filename) {
+  const r = await fetch(api('/api/convert'), {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ filename }),
+  });
+  const d = await r.json();
+  if (d.job_id) addJob(d.job_id, `Converting: ${filename}`);
+  else toast(d.error || 'Unknown error', true);
+}
+
+async function updateYtDlp() {
+  const r = await fetch(api('/api/update-yt-dlp'), { method:'POST' });
+  const d = await r.json();
+  if (d.job_id) addJob(d.job_id, 'Updating yt-dlp…');
+  refreshVersion();
+}
+
+async function refreshVersion() {
+  try {
+    const r = await fetch(api('/api/version'));
+    const d = await r.json();
+    verEl.textContent = 'yt-dlp ' + (d.version || '?');
+  } catch(e){}
+}
+
 function resetForm() {
-  probeToken++; // invalidate any in-flight probe
+  probeToken++;
   clearTimeout(probeTimer);
   urlInput.value = '';
   infoEl.classList.add('hidden');
-  infoEl.classList.remove('loading', 'error');
   thumbEl.removeAttribute('src');
   thumbEl.style.visibility = 'hidden';
   vtitleEl.textContent = '';
   vsubEl.textContent = '';
   qualitySel.innerHTML = '<option value="best">Best available</option>';
+  $('trimStart').value = ''; $('trimEnd').value = '';
+  $('subHuman').checked = true; $('subAuto').checked = false; $('subLang').value = 'en';
   jobsEl.innerHTML = '';
   tracked.clear();
   goBtn.disabled = true;
   urlInput.focus();
 }
 
-document.getElementById('reset').addEventListener('click', resetForm);
 goBtn.addEventListener('click', startDownload);
+resetBtn.addEventListener('click', resetForm);
 urlInput.addEventListener('input', scheduleProbe);
 urlInput.addEventListener('paste', () => setTimeout(scheduleProbe, 0));
 urlInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !goBtn.disabled) startDownload(); });
+$('updateYtDlp').addEventListener('click', updateYtDlp);
+refreshVersion();
 refreshFiles();
 setInterval(refreshFiles, 5000);
+
+// Drag-and-drop URL anywhere on the window
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => {
+  e.preventDefault();
+  const txt = e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain');
+  if (txt && /^https?:\/\//.test(txt)) { urlInput.value = txt.trim(); scheduleProbe(); }
+});
 </script>
 </body>
 </html>
