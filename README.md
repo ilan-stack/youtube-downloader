@@ -36,8 +36,8 @@ A companion Python/Flask build packaged as a single `.exe`. See [`windows/README
 Requirements: macOS 13+, Xcode Command Line Tools.
 
 ```bash
-git clone https://github.com/ilan-stack/youtube-downloader-mac.git
-cd youtube-downloader-mac
+git clone https://github.com/ilan-stack/youtube-downloader.git
+cd youtube-downloader
 ./scripts/fetch-binaries.sh   # downloads yt-dlp + ffmpeg + ffprobe (~200 MB)
 ./scripts/build.sh            # produces YouTube Downloader.app
 ./scripts/build.sh dmg        # also produces YouTube Downloader.dmg

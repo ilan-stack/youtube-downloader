@@ -5,7 +5,7 @@
 #define MyAppName "YouTube Downloader"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "ilan-stack"
-#define MyAppURL "https://github.com/ilan-stack/youtube-downloader-mac"
+#define MyAppURL "https://github.com/ilan-stack/youtube-downloader"
 #define MyAppExeName "YouTubeDownloader.exe"
 
 [Setup]
