@@ -61,8 +61,10 @@ final class AppState: ObservableObject {
     @Published var statusToast: String?   // transient status messages
 
     @Published var selectedTab: AppTab = .download
-    let captionApp = CaptionAppService()
     enum AppTab: String, Hashable { case download, caption }
+#if !LITE
+    let captionApp = CaptionAppService()
+#endif
 
     enum ProbeStatus: Equatable {
         case idle, loading, ready, error(String)
@@ -74,8 +76,10 @@ final class AppState: ObservableObject {
     init() {
         refreshFiles()
         Task { await self.refreshVersion() }
+#if !LITE
         // Start caption-app server in the background so the Caption tab is ready when clicked.
         captionApp.start()
+#endif
         // Auto-fill from clipboard when app becomes active.
         NotificationCenter.default.addObserver(
             forName: NSApplication.didBecomeActiveNotification,
@@ -365,6 +369,7 @@ final class AppState: ObservableObject {
         NSWorkspace.shared.activateFileViewerSelecting([file.url])
     }
 
+#if !LITE
     /// Switch to the Caption tab and (when caption-app is ready) upload the chosen video.
     func sendToCaptionApp(_ file: DownloadedFile) {
         selectedTab = .caption
@@ -386,6 +391,7 @@ final class AppState: ObservableObject {
             }
         }
     }
+#endif
 }
 
 struct Job: Identifiable {

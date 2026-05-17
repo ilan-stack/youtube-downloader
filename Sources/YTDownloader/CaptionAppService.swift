@@ -1,3 +1,4 @@
+#if !LITE
 import Foundation
 import AppKit
 
@@ -152,3 +153,4 @@ final class CaptionAppService: ObservableObject {
         _ = try await URLSession.shared.data(for: request)
     }
 }
+#endif

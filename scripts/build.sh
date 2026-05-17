@@ -2,13 +2,22 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-APP_NAME="YouTube Downloader"
-APP_DIR="$ROOT/$APP_NAME.app"
 EXEC_NAME="YTDownloader"
+
+# LITE=1 produces a build with no Caption tab / no caption-app dependency.
+SWIFT_FLAGS=""
+APP_SUFFIX=""
+if [ "${LITE:-}" = "1" ]; then
+  SWIFT_FLAGS="-Xswiftc -D -Xswiftc LITE"
+  APP_SUFFIX=" Lite"
+  echo ">> LITE build (no Caption tab)"
+fi
+APP_NAME="YouTube Downloader${APP_SUFFIX}"
+APP_DIR="$ROOT/$APP_NAME.app"
 
 echo ">> swift build (release)"
 cd "$ROOT"
-swift build -c release
+swift build -c release $SWIFT_FLAGS
 
 BIN_PATH="$ROOT/.build/release/$EXEC_NAME"
 if [ ! -f "$BIN_PATH" ]; then

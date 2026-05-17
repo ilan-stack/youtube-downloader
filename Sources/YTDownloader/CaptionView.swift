@@ -1,3 +1,4 @@
+#if !LITE
 import SwiftUI
 import WebKit
 
@@ -102,3 +103,4 @@ struct CaptionWebView: NSViewRepresentable {
         }
     }
 }
+#endif

@@ -8,11 +8,18 @@ struct ContentView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
+#if !LITE
                 tabBar
+#endif
                 Group {
                     switch state.selectedTab {
                     case .download: downloadTab
-                    case .caption: CaptionView(service: state.captionApp)
+                    case .caption:
+#if !LITE
+                        CaptionView(service: state.captionApp)
+#else
+                        EmptyView()
+#endif
                     }
                 }
             }
@@ -33,6 +40,7 @@ struct ContentView: View {
         .onDrop(of: [.url, .fileURL, .text], delegate: AppDropDelegate(state: state))
     }
 
+#if !LITE
     private var tabBar: some View {
         HStack(spacing: 4) {
             tabButton("Download", icon: "arrow.down.circle", tab: .download)
@@ -68,13 +76,20 @@ struct ContentView: View {
         }
         .buttonStyle(.plain)
     }
+#endif
 
     private var downloadTab: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("YouTube Downloader")
-                    .font(.system(size: 22, weight: .semibold))
-                    .padding(.bottom, 4)
+                HStack(alignment: .firstTextBaseline) {
+                    Text("YouTube Downloader")
+                        .font(.system(size: 22, weight: .semibold))
+                    Spacer()
+                    Text("yt-dlp \(state.ytDlpVersion)")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                }
+                .padding(.bottom, 4)
 
                 inputCard
 
@@ -282,6 +297,14 @@ struct ContentView: View {
             } else {
                 VStack(spacing: 0) {
                     ForEach(state.files) { f in
+#if LITE
+                        FileRow(
+                            file: f,
+                            onPlay: { state.openPlayer(for: f) },
+                            onReveal: { state.revealInFinder(f) },
+                            onConvert: { state.convertToCompatible(file: f.url) }
+                        )
+#else
                         FileRow(
                             file: f,
                             onPlay: { state.openPlayer(for: f) },
@@ -289,6 +312,7 @@ struct ContentView: View {
                             onConvert: { state.convertToCompatible(file: f.url) },
                             onCaption: { state.sendToCaptionApp(f) }
                         )
+#endif
                         Divider().opacity(0.4)
                     }
                 }
@@ -347,7 +371,9 @@ struct FileRow: View {
     let onPlay: () -> Void
     let onReveal: () -> Void
     let onConvert: () -> Void
+#if !LITE
     let onCaption: () -> Void
+#endif
 
     var body: some View {
         HStack {
@@ -356,9 +382,11 @@ struct FileRow: View {
                     .lineLimit(1).multilineTextAlignment(.leading)
             }.buttonStyle(.plain).help("Click to play")
             Spacer()
+#if !LITE
             Button { onCaption() } label: {
                 Image(systemName: "captions.bubble").font(.system(size: 12)).foregroundColor(.secondary)
             }.buttonStyle(.plain).help("Send to caption-app").disabled(file.isAudio)
+#endif
             Button { onConvert() } label: {
                 Image(systemName: "wand.and.stars").font(.system(size: 12)).foregroundColor(.secondary)
             }.buttonStyle(.plain).help("Make compatible mp4").disabled(file.isAudio)
